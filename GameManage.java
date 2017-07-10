@@ -204,7 +204,7 @@ class GameManage extends JFrame implements ActionListener , KeyListener{
           label.setBounds(x,y,300,300);
 
           JButton selectChar = new JButton(String.valueOf(i));
-          y = GameConst.DISP_HEIGHT*2/6;
+          y = GameConst.DISP_HEIGHT*3/6;
           selectChar.setBounds(x,y,100,30);
 
           selectChar.addKeyListener(this);
@@ -217,12 +217,13 @@ class GameManage extends JFrame implements ActionListener , KeyListener{
 
         for(Charcter charReview : Charcter.hostCharcters){
           JLabel label = new JLabel(charReview.getName());
+          label.setIcon(charReview.getStandingImg());
           x = GameConst.DISP_WIDTH*(count + 1)/8;
           y = GameConst.DISP_HEIGHT*4/6;
           label.setBounds(x,y,300,300);
 
           JButton selectChar = new JButton(label.getText());
-          y = GameConst.DISP_HEIGHT*5/6;
+          y = GameConst.DISP_HEIGHT*11/12;
           selectChar.setBounds(x,y,100,30);
 
           selectChar.addKeyListener(this);
@@ -280,6 +281,7 @@ class GameManage extends JFrame implements ActionListener , KeyListener{
           selectHostChar(index);
           JLabel label = (JLabel)p.getComponent(selectChange * 2);
           label.setText(Charcter.hostCharcters.get(index).getName());
+          label.setIcon(Charcter.hostCharcters.get(index).getStandingImg());
         }else{
 
         }
@@ -389,14 +391,17 @@ class Charcter{
 
   }
 
-  public Charcter(String name,int hp,int atk,int def,int spd){
+  public Charcter(String name,int hp,int atk,int def,int spd,int index){
     _name = name;
     _hp = hp;
     _hpMax = _hp;
     _atk = atk;
     _def = def;
     _spd = spd;
+    standingImg = new ImageIcon("./charTest" + index + ".png");
+    System.out.println(standingImg);
     label = new JLabel(_name);
+    label.setIcon(standingImg);
   }
 
   public static void setup(){
@@ -412,8 +417,9 @@ class Charcter{
 
       Pattern p = Pattern.compile("[," + crlf + "]+");
       String[] status = p.split(str);
+      int index = 0;
       for(int i = 0;i < status.length;i++){
-        hostCharcters.add(new Charcter(status[i++],Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i])));
+        hostCharcters.add(new Charcter(status[i++],Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i]),index++));
       }
 
       rd = new FileReader("gestCharcters.txt");
@@ -421,8 +427,9 @@ class Charcter{
       rd.close();
       str = new String(buff,0,hoge);
       status = p.split(str);
+      index = 0;
       for(int i = 0;i < status.length;i++){
-        gestCharcters.add(new Charcter(status[i++],Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i])));
+        gestCharcters.add(new Charcter(status[i++],Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i++]),Integer.parseInt(status[i]),index++));
       }
     }catch(IOException e){
       System.out.println("error" + e);
@@ -479,6 +486,10 @@ class Charcter{
 
   public JLabel getLabel(){
     return label;
+  }
+
+  public ImageIcon getStandingImg(){
+    return standingImg;
   }
 }
 
